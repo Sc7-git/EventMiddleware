@@ -1,0 +1,58 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <title>事件驱动中间件测试</title>
+</head>
+<body>
+    <h1 style="text-align:center;">事件驱动中间件测试</h1>
+    <div style="width: 100px;margin: auto;">
+        <button type="button" id="btn1" class="btn btn-primary" style="width:100px;text-align:center;margin:auto;">
+            Start
+        </button>
+    </div>
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+    <!-- <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>-->
+    <script src="https://cdn.bootcss.com/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="/EventMiddleware.js"></script>
+    <script type="text/javascript">
+
+        $(function () {
+            var i = 0;
+            //1、实例化中间件
+            var mw = new EventMiddleware($("#btn1"));
+            //2、自定义中间件, 调用next(context)执行下一个中间件, return则终止中间件执行
+            //2.1、自定义初始化中间件（中间件实例过程中只会执行一次）
+            mw.one((next) => (context) => { console.log("第一个执行"); next(context) })
+                .useStart((next) => (context) => { console.log("只执一次1"); next(context) })
+                .useStart((next) => (context) => { console.log("只执一次2"); next(context) })
+
+            //2.2、事件中间件，只能定义一个
+            mw.useEvent((next) => (context) => { context.click(() => { console.log("执行" + ++i + "次点击事件"); next(context) }) })
+
+            //2.3、触发事件之后执行的中间件
+            mw.use((next) => (context) => { console.log("触发中间件1"); next(context) })
+                .use((next) => (context) => { console.log("触发中间件2"); next(context) })
+
+            //2.4、去最后一个中间件提示
+            //mw.end((next) => (context) => { })
+
+            //3、启动中间件
+            mw.run()
+        })
+
+
+    </script>
+</body>
+</html>
