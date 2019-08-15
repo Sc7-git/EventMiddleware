@@ -8,7 +8,7 @@
         var context = this;
         context._middlewareArray = [];
         context._middlewareStartArray = [];
-        context._endMiddleware = (context) => console.log("事件驱动中间件文档参考: https://github.com/Sc7/EventMiddleware");
+        context._endMiddleware = (context) => console.log("事件驱动中间件文档参考: https://github.com/Sc7-git/EventMiddleware");
         context._eventContext = eventContext;
     }
 
