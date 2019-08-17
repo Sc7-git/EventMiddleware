@@ -8,7 +8,7 @@ javascript事件驱动中间件
 # 1、实例化中间件  # 
     var mw = new EventMiddleware($("#btn1"));
 # 2、自定义中间件 #
-** 调用next(context)执行下一个中间件, return则终止中间件执行**
+**调用next(context)执行下一个中间件, return则终止中间件执行**
 ## 2.1、自定义初始化中间件（中间件实例过程中只会执行一次） ##
     mw.one((next) => (context) => { console.log("第一个执行"); next(context) })
     .useStart((next) => (context) => { console.log("只执一次1"); next(context) })
